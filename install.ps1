@@ -218,8 +218,8 @@ chmod 0775 /var/spool/mail
 
 echo '--- apk update ---'
 apk update </dev/null
-echo '--- install base tools (shadow brings useradd/passwd/chpasswd; Chimera uses doas not sudo) ---'
-apk add shadow doas bash nano </dev/null
+echo '--- install bash (shadow/opendoas/nano already in base ROOTFS) ---'
+apk add bash </dev/null
 
 echo 'root:$rpw' | chpasswd
 useradd -m -G wheel,users -s /bin/bash $u
