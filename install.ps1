@@ -218,7 +218,7 @@ chmod 0775 /var/spool/mail
 
 echo '--- apk update ---'
 apk update </dev/null
-echo '--- install bash (shadow/opendoas/nano already in base ROOTFS) ---'
+echo '--- apk add bash ---'
 apk add bash </dev/null
 
 echo 'root:$rpw' | chpasswd
@@ -274,7 +274,7 @@ Write-Host ""
 Write-Host "  Useful apk commands:"
 Write-Host "    apk search <term>         search packages"
 Write-Host "    apk info <pkg>            show package info"
-Write-Host "    doas apkadd <pkg>        install"
-Write-Host "    doas apkupgrade          update everything"
-Write-Host "    doas apkdel <pkg>        remove"
+Write-Host "    doas apk add <pkg>        install"
+Write-Host "    doas apk upgrade          update everything"
+Write-Host "    doas apk del <pkg>        remove"
 Write-Host ""
