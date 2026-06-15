@@ -49,9 +49,9 @@ If you prefer the terminal path, scroll to [Usage](#usage) below.
    - writes `/etc/wsl.conf` with sensible defaults (`appendWindowsPath=false`
      and `noexec` on `/mnt/c` — see [Hardening](#hardening) below)
    - creates `/etc/hostname`, sets timezone
-   - runs `apk update`, `apk upgrade --available`, installs
-     `shadow sudo bash nano chimera-bootstrap`
-   - creates a non-root user in the `wheel` group with sudo enabled
+   - runs `apk update` then installs `shadow doas bash nano`
+   - creates a non-root user in the `wheel` group with `doas`
+     (OpenBSD's lighter sudo) wired via `/etc/doas.conf`
 7. Bounces WSL so the default-user setting takes effect
 8. Smoke-tests with `whoami` + `apk --version` + `uname -r`
 
@@ -106,14 +106,16 @@ Example: install to a non-system drive, named differently:
 ## After install
 
 The installer creates one user (the one you set during the run), in the
-`wheel` group with sudo enabled. `sudo`, `bash`, and `nano` are installed.
+`wheel` group with `doas` enabled. `doas`, `bash`, and `nano` are installed.
+`doas` is OpenBSD's lighter sudo replacement, which Chimera ships by
+default instead of `sudo`. Use it the same way: `doas apk add ...`.
 Updates:
 
 ```sh
-sudo apk update                   # refresh index
-sudo apk upgrade --available      # update everything
-sudo apk add <pkg>                # install
-sudo apk del <pkg>                # remove
+doas apk update                   # refresh index
+doas apk upgrade --available      # update everything
+doas apk add <pkg>                # install
+doas apk del <pkg>                # remove
 apk search <term>                 # search
 apk info <pkg>                    # show package info
 ```

@@ -218,17 +218,15 @@ chmod 0775 /var/spool/mail
 
 echo '--- apk update ---'
 apk update </dev/null
-echo '--- install base tools (shadow brings useradd/passwd/chpasswd) ---'
-apk add shadow sudo bash nano </dev/null
+echo '--- install base tools (shadow brings useradd/passwd/chpasswd; Chimera uses doas not sudo) ---'
+apk add shadow doas bash nano </dev/null
 
 echo 'root:$rpw' | chpasswd
 useradd -m -G wheel,users -s /bin/bash $u
 echo "${u}:$upw" | chpasswd
 
-if [ -f /etc/sudoers ]; then
-    sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-    sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
-fi
+echo 'permit persist :wheel' > /etc/doas.conf
+chmod 0400 /etc/doas.conf
 
 echo '--- setup done ---'
 "@
@@ -276,7 +274,7 @@ Write-Host ""
 Write-Host "  Useful apk commands:"
 Write-Host "    apk search <term>         search packages"
 Write-Host "    apk info <pkg>            show package info"
-Write-Host "    sudo apk add <pkg>        install"
-Write-Host "    sudo apk upgrade          update everything"
-Write-Host "    sudo apk del <pkg>        remove"
+Write-Host "    doas apkadd <pkg>        install"
+Write-Host "    doas apkupgrade          update everything"
+Write-Host "    doas apkdel <pkg>        remove"
 Write-Host ""
