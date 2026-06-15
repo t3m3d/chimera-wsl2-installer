@@ -217,11 +217,9 @@ mkdir -p /var/spool/mail
 chmod 0775 /var/spool/mail
 
 echo '--- apk update ---'
-apk update
-echo '--- apk upgrade ---'
-apk upgrade --available
+timeout 120 apk update </dev/null
 echo '--- install base tools (shadow brings useradd/passwd/chpasswd) ---'
-apk add shadow sudo bash nano chimera-bootstrap
+timeout 300 apk add --no-interactive shadow sudo bash nano </dev/null || timeout 300 apk add shadow sudo bash nano </dev/null
 
 echo 'root:$rpw' | chpasswd
 useradd -m -G wheel,users -s /bin/bash $u
